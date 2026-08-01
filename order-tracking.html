@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتبع الطلبات - ORIBAD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .tracking-page {
+            padding: 40px 0;
+        }
+        
+        .tracking-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .tracking-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .tracking-id {
+            color: #7c3aed;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .tracking-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .tracking-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e5e7eb;
+            z-index: 0;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step .step-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #aaa;
+            transition: all 0.5s;
+        }
+        
+        .step .step-circle.active {
+            background: #7c3aed;
+            color: white;
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+        }
+        
+        .step .step-circle.completed {
+            background: #10b981;
+            color: white;
+        }
+        
+        .step .step-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 8px;
+            text-align: center;
+        }
+        
+        .step .step-label.active {
+            color: #7c3aed;
+            font-weight: 700;
+        }
+        
+        .step .step-label.completed {
+            color: #10b981;
+        }
+        
+        .order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .order-details .detail-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .order-details .detail-item label {
+            display: block;
+            color: #888;
+            font-size: 0.8rem;
+        }
+        
+        .order-details .detail-item span {
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .tracking-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .tracking-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .tracking-input input:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+        
+        .tracking-input button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .tracking-input button:hover {
+            transform: scale(1.02);
+        }
+        
+        .no-order {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .no-order i {
+            font-size: 4rem;
+            color: #d1d5db;
+            margin-bottom: 15px;
+        }
+        
+        .no-order p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 600px) {
+            .tracking-steps {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .tracking-steps::before {
+                display: none;
+            }
+            
+            .step {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .tracking-input {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ====== الهيدر ====== -->
+    <header>
+        <div class="container header-container">
+            <div class="logo-banner">
+                <h1 class="logo-text">ORIBAD</h1>
+                <span class="logo-sub">أوريباد</span>
+            </div>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="categories.html">الأقسام</a></li>
+                    <li><a href="cart.html">🛒 السلة <span id="cart-count" class="cart-badge">0</span></a></li>
+                    <li><a href="notifications.html">🔔 <span id="notif-count" class="notif-badge">0</span></a></li>
+                    <li><a href="login.html" class="btn-login">تسجيل الدخول</a></li>
+                </ul>
+            </nav>
+            
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== تتبع الطلبات ====== -->
+    <section class="tracking-page">
+        <div class="container">
+            <div class="tracking-container">
+                <h2 style="font-size: 1.8rem; margin-bottom: 20px;">📦 تتبع الطلبات</h2>
+                
+                <div class="tracking-input">
+                    <input type="text" id="order-id-input" placeholder="أدخل رقم الطلب (مثال: #123456)">
+                    <button onclick="trackOrder()"><i class="fas fa-search"></i> تتبع</button>
+                </div>
+                
+                <div id="tracking-result">
+                    <div class="tracking-card no-order">
+                        <i class="fas fa-box"></i>
+                        <p>أدخل رقم الطلب لعرض حالة الطلب</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== الفوتر ====== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ORIBAD</h3>
+                    <p>متجرك الأول للأزياء العصرية</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="categories.html">الأقسام</a></li>
+                        <li><a href="cart.html">سلة التسوق</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>تابعنا</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 ORIBAD - جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/orders.js"></script>
+</body>
+</html>
