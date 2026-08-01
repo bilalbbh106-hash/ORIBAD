@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة التسوق - ORIBAD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- ====== الهيدر ====== -->
+    <header>
+        <div class="container header-container">
+            <div class="logo-banner">
+                <h1 class="logo-text">ORIBAD</h1>
+                <span class="logo-sub">أوريباد</span>
+            </div>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="categories.html">الأقسام</a></li>
+                    <li><a href="cart.html" class="active">🛒 السلة <span id="cart-count" class="cart-badge">0</span></a></li>
+                    <li><a href="notifications.html">🔔 <span id="notif-count" class="notif-badge">0</span></a></li>
+                    <li><a href="login.html" class="btn-login">تسجيل الدخول</a></li>
+                </ul>
+            </nav>
+            
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== محتوى السلة ====== -->
+    <section class="cart-section">
+        <div class="container">
+            <h2 class="section-title">🛒 سلة التسوق</h2>
+            
+            <div class="cart-container">
+                <div class="cart-items-wrapper">
+                    <div id="cart-items">
+                        <!-- سيتم عرض المنتجات هنا بواسطة JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="cart-summary">
+                    <h3>ملخص الطلب</h3>
+                    <div class="summary-row">
+                        <span>عدد المنتجات:</span>
+                        <span id="cart-item-count">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>المجموع:</span>
+                        <span id="cart-total">0 دج</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>الشحن:</span>
+                        <span id="shipping-cost">0 دج</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>الإجمالي:</span>
+                        <span id="grand-total">0 دج</span>
+                    </div>
+                    
+                    <button class="btn-checkout" onclick="checkout()">
+                        <i class="fas fa-credit-card"></i> إتمام الشراء
+                    </button>
+                    <button class="btn-clear" onclick="clearCart()">
+                        <i class="fas fa-trash"></i> إفراغ السلة
+                    </button>
+                    <a href="categories.html" class="btn-continue">
+                        <i class="fas fa-arrow-right"></i> متابعة التسوق
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== الفوتر ====== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ORIBAD</h3>
+                    <p>متجرك الأول للأزياء العصرية</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="categories.html">الأقسام</a></li>
+                        <li><a href="cart.html">سلة التسوق</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>تابعنا</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 ORIBAD - جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/notifications.js"></script>
+</body>
+</html>
