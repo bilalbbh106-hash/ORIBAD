@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الطلبات - ORIBAD</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- ====== الهيدر ====== -->
+    <header>
+        <div class="container header-container">
+            <div class="logo-banner" style="padding: 8px 20px;">
+                <h1 class="logo-text" style="font-size: 1.5rem;">ORIBAD</h1>
+                <span class="logo-sub" style="font-size: 0.6rem;">لوحة التحكم</span>
+            </div>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> الرئيسية</a></li>
+                    <li><a href="add-product.html"><i class="fas fa-plus-circle"></i> إضافة منتج</a></li>
+                    <li><a href="manage-orders.html" class="active"><i class="fas fa-truck"></i> الطلبات</a></li>
+                    <li><a href="manage-notifications.html"><i class="fas fa-bell"></i> الإشعارات</a></li>
+                    <li><a href="#" onclick="logout()" class="btn-login" style="background: #ef4444;"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
+                </ul>
+            </nav>
+            
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== إدارة الطلبات ====== -->
+    <section class="admin-section-full">
+        <div class="container">
+            <div class="section-header">
+                <h2>📋 إدارة الطلبات</h2>
+                <div class="filter-actions">
+                    <select id="order-filter" onchange="filterOrders()">
+                        <option value="all">جميع الطلبات</option>
+                        <option value="pending">⏳ قيد الانتظار</option>
+                        <option value="processing">⚙️ قيد التجهيز</option>
+                        <option value="shipped">🚚 تم الشحن</option>
+                        <option value="delivered">✅ تم التسليم</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>العميل</th>
+                            <th>المنتجات</th>
+                            <th>المجموع</th>
+                            <th>الحالة</th>
+                            <th>التاريخ</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-list">
+                        <!-- سيتم عرض الطلبات هنا -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/orders.js"></script>
+</body>
+</html>
