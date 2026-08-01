@@ -1,0 +1,246 @@
+/* ====== صفحة السلة ====== */
+.cart-section {
+    padding: 40px 0;
+}
+
+.cart-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+/* ====== عناصر السلة ====== */
+.cart-items-wrapper {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 150px 100px;
+    gap: 15px;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.3s;
+}
+
+.cart-item:hover {
+    background: #f8f9fa;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cart-item-info h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.cart-item-info p {
+    color: #888;
+    font-size: 0.85rem;
+    margin: 2px 0;
+}
+
+.cart-item-price {
+    color: #7c3aed !important;
+    font-weight: 700;
+}
+
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-item-controls button {
+    background: #f3f4f6;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.3s;
+}
+
+.cart-item-controls button:hover {
+    background: #7c3aed;
+    color: white;
+}
+
+.cart-item-controls span {
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+}
+
+.btn-remove {
+    background: #fee2e2 !important;
+    color: #ef4444 !important;
+}
+
+.btn-remove:hover {
+    background: #ef4444 !important;
+    color: white !important;
+}
+
+.cart-item-total {
+    font-weight: 800;
+    color: #7c3aed;
+    font-size: 1.1rem;
+}
+
+/* ====== السلة الفارغة ====== */
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-cart i {
+    font-size: 4rem;
+    color: #d1d5db;
+    margin-bottom: 15px;
+}
+
+.empty-cart p {
+    font-size: 1.2rem;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+/* ====== ملخص الطلب ====== */
+.cart-summary {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.cart-summary h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+    color: #555;
+}
+
+.summary-row.total {
+    border-bottom: none;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #333;
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top: 2px solid #7c3aed;
+}
+
+.btn-checkout {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 1.05rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-checkout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+}
+
+.btn-clear {
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-clear:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-continue {
+    display: block;
+    text-align: center;
+    background: #f3f4f6;
+    color: #333;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    width: 100%;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-continue:hover {
+    background: #e5e7eb;
+}
+
+/* ====== استجابة ====== */
+@media (max-width: 768px) {
+    .cart-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .cart-item {
+        grid-template-columns: 60px 1fr;
+        grid-template-rows: auto auto;
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .cart-item-image {
+        width: 60px;
+        height: 60px;
+        grid-row: span 2;
+    }
+    
+    .cart-item-controls {
+        grid-column: 2;
+        justify-self: start;
+    }
+    
+    .cart-item-total {
+        grid-column: 2;
+        justify-self: end;
+    }
+    
+    .cart-summary {
+        position: relative;
+        top: 0;
+    }
+}
