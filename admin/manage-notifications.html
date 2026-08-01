@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الإشعارات - ORIBAD</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- ====== الهيدر ====== -->
+    <header>
+        <div class="container header-container">
+            <div class="logo-banner" style="padding: 8px 20px;">
+                <h1 class="logo-text" style="font-size: 1.5rem;">ORIBAD</h1>
+                <span class="logo-sub" style="font-size: 0.6rem;">لوحة التحكم</span>
+            </div>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> الرئيسية</a></li>
+                    <li><a href="add-product.html"><i class="fas fa-plus-circle"></i> إضافة منتج</a></li>
+                    <li><a href="manage-orders.html"><i class="fas fa-truck"></i> الطلبات</a></li>
+                    <li><a href="manage-notifications.html" class="active"><i class="fas fa-bell"></i> الإشعارات</a></li>
+                    <li><a href="#" onclick="logout()" class="btn-login" style="background: #ef4444;"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
+                </ul>
+            </nav>
+            
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== إدارة الإشعارات ====== -->
+    <section class="admin-section-full">
+        <div class="container">
+            <div class="section-header">
+                <h2>🔔 إدارة الإشعارات</h2>
+                <button class="btn-primary" onclick="showAddNotificationForm()">
+                    <i class="fas fa-plus"></i> إشعار جديد
+                </button>
+            </div>
+            
+            <!-- نموذج إضافة إشعار -->
+            <div id="add-notification-form" class="notification-form" style="display: none;">
+                <div class="form-container" style="max-width: 800px; margin: 0 auto;">
+                    <h3><i class="fas fa-bell" style="color: #7c3aed;"></i> إشعار جديد</h3>
+                    <form onsubmit="handleAddNotification(event)">
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>عنوان الإشعار <span class="required">*</span></label>
+                                <input type="text" id="notif-title" placeholder="مثال: تخفيضات الصيف" required>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label>نص الإشعار <span class="required">*</span></label>
+                                <textarea id="notif-message" rows="4" placeholder="أدخل نص الإشعار..." required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>النوع</label>
+                                <select id="notif-type">
+                                    <option value="general">عام</option>
+                                    <option value="offer">عرض خاص</option>
+                                    <option value="urgent">هام</option>
+                                    <option value="update">تحديث</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>المستهدفين</label>
+                                <select id="notif-target">
+                                    <option value="all">جميع المستخدمين</option>
+                                    <option value="users">المستخدمين فقط</option>
+                                    <option value="admins">الأدمن فقط</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-paper-plane"></i> إرسال الإشعار
+                            </button>
+                            <button type="button" class="btn-secondary" onclick="hideAddNotificationForm()">
+                                <i class="fas fa-times"></i> إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- قائمة الإشعارات -->
+            <div class="notifications-list" id="notifications-list">
+                <!-- سيتم عرض الإشعارات هنا -->
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/notifications.js"></script>
+</body>
+</html>
