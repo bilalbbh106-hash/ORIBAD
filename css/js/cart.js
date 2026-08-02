@@ -18,13 +18,12 @@ function addToCart(productId) {
     const product = productsData.find(p => p.id === productId);
     
     if (!product) {
-        alert('المنتج غير موجود!');
+        showNotification('المنتج غير موجود!', 'error');
         return;
     }
 
-    // التحقق من المخزون
     if (product.stock <= 0) {
-        alert('للأسف المنتج غير متوفر حالياً!');
+        showNotification('للأسف المنتج غير متوفر حالياً!', 'error');
         return;
     }
 
@@ -34,7 +33,7 @@ function addToCart(productId) {
         if (existingItem.quantity < product.stock) {
             existingItem.quantity++;
         } else {
-            alert('الكمية المطلوبة غير متوفرة!');
+            showNotification('الكمية المطلوبة غير متوفرة!', 'error');
             return;
         }
     } else {
@@ -50,7 +49,7 @@ function addToCart(productId) {
     }
 
     saveCart(cart);
-    showNotification('تم إضافة المنتج للسلة ✅');
+    showNotification('تم إضافة المنتج للسلة ✅', 'success');
     updateCartCount();
 }
 
@@ -60,7 +59,7 @@ function removeFromCart(productId) {
     cart = cart.filter(item => item.id !== productId);
     saveCart(cart);
     updateCartCount();
-    displayCartItems(); // إذا كنا في صفحة السلة
+    if (typeof displayCartItems === 'function') displayCartItems();
 }
 
 // تحديث كمية منتج في السلة
@@ -76,19 +75,22 @@ function updateCartQuantity(productId, newQuantity) {
     }
     
     if (newQuantity > item.maxStock) {
-        alert('الكمية المطلوبة غير متوفرة!');
+        showNotification('الكمية المطلوبة غير متوفرة!', 'error');
         return;
     }
     
     item.quantity = newQuantity;
     saveCart(cart);
-    displayCartItems();
+    if (typeof displayCartItems === 'function') displayCartItems();
 }
 
 // عرض منتجات السلة
 function displayCartItems() {
     const container = document.getElementById('cart-items');
     const totalElement = document.getElementById('cart-total');
+    const itemCountElement = document.getElementById('cart-item-count');
+    const shippingElement = document.getElementById('shipping-cost');
+    const grandTotalElement = document.getElementById('grand-total');
     
     if (!container) return;
     
@@ -103,14 +105,19 @@ function displayCartItems() {
             </div>
         `;
         if (totalElement) totalElement.textContent = '0 دج';
+        if (itemCountElement) itemCountElement.textContent = '0';
+        if (shippingElement) shippingElement.textContent = '0 دج';
+        if (grandTotalElement) grandTotalElement.textContent = '0 دج';
         return;
     }
     
     let total = 0;
+    let itemCount = 0;
     
     container.innerHTML = cart.map(item => {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
+        itemCount += item.quantity;
         
         return `
             <div class="cart-item" data-id="${item.id}">
@@ -135,7 +142,14 @@ function displayCartItems() {
         `;
     }).join('');
     
+    // تحديث الملخص
+    const shipping = total > 0 ? (total >= 500 ? 0 : 50) : 0;
+    const grandTotal = total + shipping;
+    
     if (totalElement) totalElement.textContent = `${total} دج`;
+    if (itemCountElement) itemCountElement.textContent = itemCount;
+    if (shippingElement) shippingElement.textContent = `${shipping} دج`;
+    if (grandTotalElement) grandTotalElement.textContent = `${grandTotal} دج`;
 }
 
 // تحديث عدد السلة في الهيدر
@@ -153,60 +167,64 @@ function updateCartCount() {
 function clearCart() {
     if (confirm('هل أنت متأكد من إفراغ السلة؟')) {
         saveCart([]);
-        displayCartItems();
+        if (typeof displayCartItems === 'function') displayCartItems();
         updateCartCount();
+        showNotification('تم إفراغ السلة', 'info');
     }
 }
 
-// ====== إظهار إشعار مؤقت ======
-function showNotification(message) {
-    const notif = document.createElement('div');
-    notif.className = 'toast-notification';
-    notif.innerHTML = `
-        <i class="fas fa-check-circle" style="color: #10b981;"></i>
-        ${message}
-    `;
-    document.body.appendChild(notif);
+// إتمام الشراء
+function checkout() {
+    const cart = getCart();
     
+    if (cart.length === 0) {
+        showNotification('السلة فارغة! أضف منتجات أولاً', 'error');
+        return;
+    }
+    
+    // التحقق من تسجيل الدخول
+    const session = checkSession ? checkSession() : null;
+    if (!session) {
+        showNotification('الرجاء تسجيل الدخول أولاً', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
+        return;
+    }
+    
+    // حساب المجموع
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shipping = total >= 500 ? 0 : 50;
+    const grandTotal = total + shipping;
+    
+    // إشعار نجاح
+    showNotification(`تم إنشاء الطلب بنجاح! الإجمالي: ${grandTotal} دج 🎉`, 'success');
+    
+    // إفراغ السلة
+    saveCart([]);
+    updateCartCount();
+    
+    // إعادة توجيه لتتبع الطلب
     setTimeout(() => {
-        notif.classList.add('fade-out');
-        setTimeout(() => notif.remove(), 300);
-    }, 3000);
+        window.location.href = 'order-tracking.html';
+    }, 2000);
 }
 
-// إضافة تنسيق الإشعارات
-const style = document.createElement('style');
-style.textContent = `
-    .toast-notification {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: white;
-        padding: 15px 25px;
-        border-radius: 12px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        border-right: 4px solid #7c3aed;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 700;
-        animation: slideUp 0.5s ease;
-        direction: rtl;
+// ====== تحميل الصفحة ======
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('cart-items')) {
+        displayCartItems();
     }
-    
-    .toast-notification.fade-out {
-        animation: slideDown 0.3s ease forwards;
-    }
-    
-    @keyframes slideUp {
-        from { transform: translateY(100px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-    
-    @keyframes slideDown {
-        from { transform: translateY(0); opacity: 1; }
-        to { transform: translateY(100px); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
+    updateCartCount();
+});
+
+// ====== تصدير الدوال ======
+window.getCart = getCart;
+window.saveCart = saveCart;
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.updateCartQuantity = updateCartQuantity;
+window.displayCartItems = displayCartItems;
+window.updateCartCount = updateCartCount;
+window.clearCart = clearCart;
+window.checkout = checkout;
