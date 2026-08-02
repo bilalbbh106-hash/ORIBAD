@@ -1,4 +1,4 @@
-// ====== بيانات تجريبية ======
+// ====== بيانات المنتجات الوهمية (للتجربة) ======
 const productsData = [
     {
         id: 1,
@@ -113,7 +113,6 @@ function filterProducts(category) {
         : productsData.filter(p => p.category === category);
     displayProducts(filtered);
     
-    // تحديث الفلتر
     const select = document.getElementById('filter-category');
     if (select) select.value = category;
 }
@@ -171,8 +170,9 @@ function toggleMenu() {
 // ====== تحميل الصفحة ======
 document.addEventListener('DOMContentLoaded', function() {
     displayProducts(productsData);
-    updateCartCount();
-    updateNotificationCount();
+    if (typeof updateCartCount === 'function') updateCartCount();
+    if (typeof updateNotificationCount === 'function') updateNotificationCount();
+    if (typeof updateUIForAuth === 'function') updateUIForAuth();
 });
 
 // ====== إغلاق القائمة عند النقر خارجها ======
@@ -184,3 +184,11 @@ document.addEventListener('click', function(event) {
         nav.classList.remove('show');
     }
 });
+
+// ====== تصدير الدوال للاستخدام في HTML ======
+window.displayProducts = displayProducts;
+window.filterProducts = filterProducts;
+window.applyFilters = applyFilters;
+window.resetFilters = resetFilters;
+window.toggleMenu = toggleMenu;
+window.getCategoryName = getCategoryName;
