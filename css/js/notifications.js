@@ -9,8 +9,8 @@ function addNotification(title, message, type = 'general', target = 'all') {
         id: Date.now(),
         title: title,
         message: message,
-        type: type, // general, offer, urgent, update
-        target: target, // all, users, admins
+        type: type,
+        target: target,
         read: false,
         createdAt: new Date().toISOString()
     };
@@ -18,10 +18,8 @@ function addNotification(title, message, type = 'general', target = 'all') {
     notifications.push(newNotif);
     localStorage.setItem('oribad_notifications', JSON.stringify(notifications));
     
-    // تحديث العدد
     updateNotificationCount();
     
-    // إذا كنا في صفحة الإشعارات، تحديث العرض
     if (document.getElementById('notifications-list')) {
         displayNotifications();
     }
@@ -40,7 +38,6 @@ function displayNotifications(filter = 'all') {
         filtered = notifications.filter(n => n.type === filter);
     }
     
-    // ترتيب حسب الأحدث
     filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     if (filtered.length === 0) {
@@ -88,13 +85,11 @@ function displayNotifications(filter = 'all') {
         `;
     }).join('');
     
-    // تحديث العدد
     updateNotificationCount();
 }
 
 // ====== فلترة الإشعارات ======
 function filterNotifications(filter, button) {
-    // تحديث الأزرار
     document.querySelectorAll('.notif-filters button').forEach(btn => {
         btn.classList.remove('active');
     });
@@ -149,7 +144,7 @@ function timeAgo(date) {
     return 'الآن';
 }
 
-// ====== إشعارات تجريبية افتراضية ======
+// ====== إشعارات تجريبية ======
 function loadSampleNotifications() {
     if (notifications.length === 0) {
         addNotification(
@@ -165,70 +160,25 @@ function loadSampleNotifications() {
             'offer',
             'all'
         );
-        
-        addNotification(
-            'وصلت تشكيلة جديدة! 👟',
-            'تشكيلة جديدة من الأحذية الرياضية متوفرة الآن في المتجر.',
-            'update',
-            'users'
-        );
     }
-}
-
-// ====== معالجة إشعارات الأدمن ======
-function handleAddNotification(event) {
-    event.preventDefault();
-    
-    const title = document.getElementById('notif-title').value.trim();
-    const message = document.getElementById('notif-message').value.trim();
-    const type = document.getElementById('notif-type').value;
-    const target = document.getElementById('notif-target').value;
-    
-    if (!title || !message) {
-        showNotification('الرجاء ملء جميع الحقول', 'error');
-        return;
-    }
-    
-    // إضافة الإشعار
-    addNotification(title, message, type, target);
-    
-    // إعادة تعيين النموذج
-    document.getElementById('manage-notifications-form')?.reset();
-    hideAddNotificationForm();
-    
-    showNotification('تم إرسال الإشعار بنجاح 📨', 'success');
-    
-    // تحديث الإحصائيات في لوحة التحكم
-    if (typeof loadDashboardStats === 'function') {
-        loadDashboardStats();
-    }
-}
-
-// ====== تحميل الإشعارات في لوحة التحكم ======
-function loadNotifications() {
-    const container = document.getElementById('notifications-list');
-    if (!container) return;
-    
-    // استخدام نفس دالة displayNotifications
-    displayNotifications();
 }
 
 // ====== تحميل الصفحة ======
 document.addEventListener('DOMContentLoaded', function() {
-    // تحميل الإشعارات التجريبية
     loadSampleNotifications();
     
-    // عرض الإشعارات إذا كنا في صفحة الإشعارات
     if (document.getElementById('notifications-list')) {
         displayNotifications();
     }
     
-    // تحديث العدد
     updateNotificationCount();
-    
-    // إذا كنا في لوحة التحكم، نضيف مستمع للنموذج
-    const form = document.getElementById('manage-notifications-form');
-    if (form) {
-        form.addEventListener('submit', handleAddNotification);
-    }
 });
+
+// ====== تصدير الدوال ======
+window.addNotification = addNotification;
+window.displayNotifications = displayNotifications;
+window.filterNotifications = filterNotifications;
+window.markAsRead = markAsRead;
+window.markAllAsRead = markAllAsRead;
+window.updateNotificationCount = updateNotificationCount;
+window.timeAgo = timeAgo;
