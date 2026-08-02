@@ -8,7 +8,7 @@ function searchProducts(query) {
     return productsData.filter(product => 
         product.name.toLowerCase().includes(searchTerm) ||
         getCategoryName(product.category).includes(searchTerm) ||
-        product.description.toLowerCase().includes(searchTerm)
+        (product.description && product.description.toLowerCase().includes(searchTerm))
     );
 }
 
@@ -48,13 +48,10 @@ function getProductsByPriceRange(min, max) {
     return productsData.filter(p => p.price >= min && p.price <= max);
 }
 
-// ====== إضافة حقل البحث للسلة ======
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const results = searchProducts(this.value);
-            displayProducts(results);
-        });
-    }
-});
+// ====== تصدير الدوال ======
+window.searchProducts = searchProducts;
+window.sortProducts = sortProducts;
+window.getAvailableProducts = getAvailableProducts;
+window.getProductsByCategory = getProductsByCategory;
+window.getProductsBySize = getProductsBySize;
+window.getProductsByPriceRange = getProductsByPriceRange;
