@@ -15,27 +15,27 @@ function checkAdminAccess() {
 
 // ====== تحميل إحصائيات لوحة التحكم ======
 function loadDashboardStats() {
-    // تحديث عدد المنتجات
+    // عدد المنتجات
     const totalProducts = document.getElementById('total-products');
     if (totalProducts) {
         totalProducts.textContent = productsData.length;
     }
     
-    // تحديث عدد المستخدمين
+    // عدد المستخدمين
     const totalUsers = document.getElementById('total-users');
     if (totalUsers) {
         const users = JSON.parse(localStorage.getItem('oribad_users')) || [];
         totalUsers.textContent = users.length;
     }
     
-    // تحديث عدد الإشعارات
+    // عدد الإشعارات
     const totalNotifs = document.getElementById('total-notifications');
     if (totalNotifs) {
         const notifications = JSON.parse(localStorage.getItem('oribad_notifications')) || [];
         totalNotifs.textContent = notifications.length;
     }
     
-    // تحديث عدد الطلبات
+    // عدد الطلبات
     const totalOrders = document.getElementById('total-orders');
     if (totalOrders) {
         const orders = JSON.parse(localStorage.getItem('oribad_orders')) || [];
@@ -109,7 +109,6 @@ function loadRecentOrders() {
             <tr>
                 <td>#${order.id}</td>
                 <td>${order.customer || 'غير معروف'}</td>
-                <td>${order.items || 0} منتج</td>
                 <td><strong>${order.total} دج</strong></td>
                 <td><span class="order-status ${statusClass}">${statusText}</span></td>
                 <td>${new Date(order.createdAt).toLocaleDateString('ar')}</td>
@@ -135,13 +134,11 @@ function handleAddProduct(event) {
     const description = document.getElementById('product-description').value.trim();
     const imageInput = document.getElementById('product-image');
     
-    // التحقق من الحقول
-    if (!name || !category || !price || !size || stock === undefined) {
+    if (!name || !category || !price || !size || isNaN(stock)) {
         showNotification('الرجاء ملء جميع الحقول المطلوبة', 'error');
         return;
     }
     
-    // التحقق من الصورة
     if (!imageInput.files || !imageInput.files[0]) {
         showNotification('الرجاء اختيار صورة للمنتج', 'error');
         return;
@@ -153,28 +150,21 @@ function handleAddProduct(event) {
         const newProduct = {
             id: Date.now(),
             name: name,
-            category: category,
+            category: ['shirts', 'pants', 'shoes', 'underwear', 'socks'][parseInt(category) - 1] || 'shirts',
             price: price,
             size: size,
             stock: stock,
             description: description || '',
-            image: e.target.result,
-            createdAt: new Date().toISOString()
+            image: e.target.result
         };
         
-        // إضافة المنتج للقائمة
         productsData.push(newProduct);
-        
-        // حفظ في localStorage
         localStorage.setItem('oribad_products', JSON.stringify(productsData));
         
         showNotification('تم إضافة المنتج بنجاح 🎉', 'success');
-        
-        // إعادة تعيين النموذج
         document.getElementById('add-product-form').reset();
         document.getElementById('image-preview').innerHTML = '';
         
-        // تحديث الإحصائيات
         loadDashboardStats();
         loadRecentProducts();
     };
@@ -196,7 +186,7 @@ function deleteProduct(productId) {
     }
 }
 
-// ====== تعديل منتج (مؤقت) ======
+// ====== تعديل منتج ======
 function editProduct(productId) {
     showNotification('سيتم إضافة ميزة التعديل قريباً', 'info');
 }
@@ -217,99 +207,9 @@ function updateOrderStatus(orderId) {
     order.status = statuses[nextIndex];
     
     localStorage.setItem('oribad_orders', JSON.stringify(orders));
-    showNotification(`تم تحديث حالة الطلب إلى: ${order.status}`, 'success');
+    showNotification(`تم تحديث حالة الطلب`, 'success');
     loadRecentOrders();
     loadDashboardStats();
-}
-
-// ====== عرض جميع الطلبات ======
-function loadAllOrders() {
-    const tbody = document.getElementById('orders-list');
-    if (!tbody) return;
-    
-    const orders = JSON.parse(localStorage.getItem('oribad_orders')) || [];
-    const filter = document.getElementById('order-filter')?.value || 'all';
-    
-    let filtered = orders;
-    if (filter !== 'all') {
-        filtered = orders.filter(o => o.status === filter);
-    }
-    
-    if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 30px; color: #888;">لا توجد طلبات</td></tr>`;
-        return;
-    }
-    
-    tbody.innerHTML = filtered.map((order, index) => {
-        const statusClass = {
-            'pending': 'status-pending',
-            'processing': 'status-processing',
-            'shipped': 'status-shipped',
-            'delivered': 'status-delivered',
-            'cancelled': 'status-cancelled'
-        }[order.status] || 'status-pending';
-        
-        const statusText = {
-            'pending': '⏳ قيد الانتظار',
-            'processing': '⚙️ قيد التجهيز',
-            'shipped': '🚚 تم الشحن',
-            'delivered': '✅ تم التسليم',
-            'cancelled': '❌ ملغي'
-        }[order.status] || order.status;
-        
-        return `
-            <tr>
-                <td>#${order.id}</td>
-                <td>${order.customer || 'غير معروف'}</td>
-                <td>${order.items || 0} منتج</td>
-                <td><strong>${order.total} دج</strong></td>
-                <td><span class="order-status ${statusClass}">${statusText}</span></td>
-                <td>${new Date(order.createdAt).toLocaleDateString('ar')}</td>
-                <td>
-                    <button class="btn-sm btn-edit" onclick="updateOrderStatus(${order.id})">
-                        <i class="fas fa-sync"></i> تحديث
-                    </button>
-                    <button class="btn-sm btn-delete" onclick="deleteOrder(${order.id})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// ====== فلترة الطلبات ======
-function filterOrders() {
-    loadAllOrders();
-}
-
-// ====== حذف طلب ======
-function deleteOrder(orderId) {
-    if (!confirm('هل أنت متأكد من حذف هذا الطلب؟')) return;
-    
-    let orders = JSON.parse(localStorage.getItem('oribad_orders')) || [];
-    orders = orders.filter(o => o.id !== orderId);
-    localStorage.setItem('oribad_orders', JSON.stringify(orders));
-    showNotification('تم حذف الطلب', 'info');
-    loadAllOrders();
-    loadDashboardStats();
-}
-
-// ====== إظهار نموذج الإشعار ======
-function showAddNotificationForm() {
-    const form = document.getElementById('add-notification-form');
-    if (form) {
-        form.style.display = 'block';
-        form.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-// ====== إخفاء نموذج الإشعار ======
-function hideAddNotificationForm() {
-    const form = document.getElementById('add-notification-form');
-    if (form) {
-        form.style.display = 'none';
-    }
 }
 
 // ====== معاينة الصورة ======
@@ -335,71 +235,31 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // التحقق من صلاحية الأدمن
     if (window.location.pathname.includes('admin/')) {
-        checkAdminAccess();
-        
-        // تحميل البيانات
-        loadDashboardStats();
-        loadRecentProducts();
-        loadRecentOrders();
-        
-        // تحميل جميع الطلبات إذا كنا في صفحة الطلبات
-        if (window.location.pathname.includes('manage-orders.html')) {
-            loadAllOrders();
-        }
-        
-        // تحميل الإشعارات إذا كنا في صفحة الإشعارات
-        if (window.location.pathname.includes('manage-notifications.html')) {
-            loadNotifications();
+        const hasAccess = checkAdminAccess();
+        if (hasAccess) {
+            loadDashboardStats();
+            loadRecentProducts();
+            loadRecentOrders();
         }
     }
 });
 
-// ====== تحميل البيانات من localStorage عند بدء التشغيل ======
-// تحميل المنتجات من localStorage إذا وجدت
+// ====== تحميل المنتجات من localStorage ======
 const savedProducts = localStorage.getItem('oribad_products');
 if (savedProducts) {
     const parsed = JSON.parse(savedProducts);
     if (parsed && parsed.length > 0) {
-        // دمج البيانات المحفوظة مع البيانات الافتراضية
         productsData.length = 0;
         productsData.push(...parsed);
     }
 }
 
-// ====== أزرار صغيرة ======
-const adminStyles = document.createElement('style');
-adminStyles.textContent = `
-    .btn-sm {
-        padding: 5px 10px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.85rem;
-        transition: transform 0.2s;
-    }
-    
-    .btn-sm:hover {
-        transform: scale(1.05);
-    }
-    
-    .btn-edit {
-        background: #dbeafe;
-        color: #2563eb;
-    }
-    
-    .btn-edit:hover {
-        background: #2563eb;
-        color: white;
-    }
-    
-    .btn-delete {
-        background: #fee2e2;
-        color: #ef4444;
-    }
-    
-    .btn-delete:hover {
-        background: #ef4444;
-        color: white;
-    }
-`;
-document.head.appendChild(adminStyles);
+// ====== تصدير الدوال ======
+window.checkAdminAccess = checkAdminAccess;
+window.loadDashboardStats = loadDashboardStats;
+window.loadRecentProducts = loadRecentProducts;
+window.loadRecentOrders = loadRecentOrders;
+window.handleAddProduct = handleAddProduct;
+window.deleteProduct = deleteProduct;
+window.editProduct = editProduct;
+window.updateOrderStatus = updateOrderStatus;
