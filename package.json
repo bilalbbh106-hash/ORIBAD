@@ -1,0 +1,17 @@
+{
+  "name": "oribad-store",
+  "version": "1.0.0",
+  "description": "ORIBAD - متجر الأزياء الإلكتروني",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0"
+  }
+}
