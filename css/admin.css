@@ -54,10 +54,6 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-.admin-section-full {
-    padding: 40px 0;
-}
-
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -141,196 +137,38 @@
     color: #dc2626;
 }
 
-/* ====== نموذج إضافة المنتج ====== */
-.admin-form-section {
-    padding: 40px 0;
+/* ====== أزرار صغيرة ====== */
+.btn-sm {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: transform 0.2s;
 }
 
-.form-container {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    max-width: 800px;
-    margin: 0 auto;
+.btn-sm:hover {
+    transform: scale(1.05);
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.btn-edit {
+    background: #dbeafe;
+    color: #2563eb;
 }
 
-.form-grid .full-width {
-    grid-column: 1 / -1;
+.btn-edit:hover {
+    background: #2563eb;
+    color: white;
 }
 
-.form-group {
-    margin-bottom: 0;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 700;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-.form-group .required {
+.btn-delete {
+    background: #fee2e2;
     color: #ef4444;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 10px 15px;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    font-family: 'Tajawal', sans-serif;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-    background: #f8f9fa;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #7c3aed;
-    background: white;
-}
-
-.form-group textarea {
-    resize: vertical;
-}
-
-/* ====== رفع الصور ====== */
-.file-upload {
-    position: relative;
-}
-
-.file-upload input[type="file"] {
-    display: none;
-}
-
-.file-label {
-    display: block;
-    padding: 30px;
-    border: 2px dashed #e5e7eb;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.3s;
-    color: #888;
-}
-
-.file-label:hover {
-    border-color: #7c3aed;
-}
-
-.file-label i {
-    font-size: 2rem;
-    display: block;
-    margin-bottom: 10px;
-    color: #7c3aed;
-}
-
-.image-preview {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.image-preview img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 2px solid #e5e7eb;
-}
-
-/* ====== أزرار النموذج ====== */
-.form-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 25px;
-    flex-wrap: wrap;
-}
-
-.form-actions .btn-primary,
-.form-actions .btn-secondary {
-    padding: 10px 30px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 1rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* ====== الإشعارات ====== */
-.notification-form {
-    margin-bottom: 30px;
-}
-
-.notifications-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.notification-item {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    border-right: 4px solid #7c3aed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.notification-item .notif-content h4 {
-    margin: 0 0 5px 0;
-    color: #333;
-}
-
-.notification-item .notif-content p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.notification-item .notif-meta {
-    color: #aaa;
-    font-size: 0.8rem;
-}
-
-.notification-item .notif-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.notif-type-general {
-    border-right-color: #3b82f6;
-}
-
-.notif-type-offer {
-    border-right-color: #f59e0b;
-}
-
-.notif-type-urgent {
-    border-right-color: #ef4444;
-    background: #fef2f2;
-}
-
-.notif-type-update {
-    border-right-color: #10b981;
+.btn-delete:hover {
+    background: #ef4444;
+    color: white;
 }
 
 /* ====== استجابة ====== */
@@ -339,35 +177,24 @@
         grid-template-columns: 1fr 1fr;
     }
     
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .section-header {
         flex-direction: column;
         gap: 10px;
         align-items: stretch;
-    }
-    
-    .notification-item {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .form-actions .btn-primary,
-    .form-actions .btn-secondary {
-        width: 100%;
-        justify-content: center;
     }
 }
 
 @media (max-width: 500px) {
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .admin-table {
+        font-size: 0.75rem;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 8px 10px;
     }
 }
