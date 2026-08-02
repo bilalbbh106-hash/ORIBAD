@@ -154,10 +154,6 @@
     gap: 5px;
 }
 
-.error-message i {
-    font-size: 0.9rem;
-}
-
 .password-hint {
     font-size: 0.8rem;
     color: #888;
@@ -186,13 +182,37 @@
     text-decoration: underline;
 }
 
-.terms-link {
-    color: #7c3aed;
-    text-decoration: none;
+/* ====== إشعارات التوست ====== */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border-right: 4px solid #7c3aed;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    animation: slideUp 0.5s ease;
+    direction: rtl;
 }
 
-.terms-link:hover {
-    text-decoration: underline;
+.toast-notification.fade-out {
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(100px); opacity: 0; }
 }
 
 /* ====== استجابة ====== */
